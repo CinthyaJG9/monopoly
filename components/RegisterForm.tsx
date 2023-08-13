@@ -1,6 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import querystring from 'querystring'; // Convierte los datos a formato x-www-form-urlencoded
 
 const FormContainer = styled.div`
   display: flex;
@@ -52,14 +53,26 @@ const RegisterForm: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+  
     try {
-      const response = await axios.post('/register', { username, password });
-      // Manejar la respuesta del servidor
+      const data = querystring.stringify({ username, password });
+      const response = await axios.post('/register', data, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+  
+      // Verifica si la respuesta es exitosa y redirige a la página de inicio de sesión
+      if (response.status === 200) {
+        window.location.href = '/login'; // Redirige a la página de inicio de sesión
+      } else {
+        setError('Ocurrió un error al registrar el usuario');
+      }
     } catch (error) {
       setError('Ocurrió un error al registrar el usuario');
     }
   };
+  
 
   return (
     <FormContainer>
