@@ -6,6 +6,7 @@ interface PropertyCardProps {
   name: string;
   price: number;
   owner: string | null;
+  children?: React.ReactNode;
 }
 
 const CardContainer = styled.div`
@@ -18,15 +19,20 @@ const CardContainer = styled.div`
   align-items: center;
 `;
 
-const PropertyCard: React.FC<PropertyCardProps> = ({ name, price, owner }) => {
+const PropertyCard: React.FC<PropertyCardProps> = ({ name, price, owner, children }) => {
   return (
-    <CardContainer>
+    <div>
       <h3>{name}</h3>
-      <p>Price: ${price}</p>
-      <p>Owner: {owner || 'Unowned'}</p>
-      {/* Agrega más detalles según tus necesidades */}
-    </CardContainer>
+      <p>Price: {price}</p>
+      <p>Owner: {owner}</p>
+      {children}
+    </div>
   );
 };
 
 export default PropertyCard;
+
+
+
+
+

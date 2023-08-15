@@ -85,17 +85,15 @@ app.prepare().then(async () => {
   }
 
   // Ruta de registro
-server.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-  const passwordHash = await bcrypt.hash(password, 10);
+  server.post('/register', async (req, res) => {
+    const { username, password } = req.body;
+    const passwordHash = await bcrypt.hash(password, 10);
 
-  // Crear un nuevo usuario en la base de datos
-  await createUser(username, passwordHash);
+    // crear un nuevo usuario en la base de datos
+    await createUser(username, passwordHash);
 
-  // Redirigir a la página de inicio de sesión después del registro exitoso
-  res.redirect('/login');
-
-});
+    res.redirect('/login');
+  });
 
   // Middleware para verificar si el usuario está autenticado
   const isAuthenticated = (req, res, next) => {
@@ -103,12 +101,7 @@ server.post('/register', async (req, res) => {
       return next();
     }
     res.redirect('/login');
-
   };
-
-  server.get('/login', (req, res) => {
-    res.render('login');
-  });
 
   // Ruta del dashboard
   server.get('/dashboard', isAuthenticated, (req, res) => {

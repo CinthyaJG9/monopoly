@@ -1,6 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 
 const FormContainer = styled.div`
   display: flex;
@@ -45,21 +46,27 @@ const FormContainer = styled.div`
   }
 `;
 
-const LoginForm: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const response = await axios.post('/login', { username, password });
-      // Manejar la respuesta del servidor
-    } catch (error) {
-      setError('Usuario o contraseña incorrectos');
-    }
-  };
+  const LoginForm: React.FC = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const router = useRouter(); // Obtiene el objeto router
+  
+    const handleSubmit = async (e: FormEvent) => {
+      e.preventDefault();
+  
+      try {
+        const response = await axios.post('/login', { username, password });
+        
+        if (response.status === 200) {
+          router.push('/play'); // Redirige a la página de juego (/play)
+        } else {
+          setError('Ocurrió un error al iniciar sesión');
+        }
+      } catch (error) {
+        setError('Usuario o contraseña incorrectos');
+      }
+    };
 
   return (
     <FormContainer>
